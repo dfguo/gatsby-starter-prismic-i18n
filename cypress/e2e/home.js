@@ -4,17 +4,17 @@ describe('home', () => {
   })
 
   it('should have the hero content', () => {
-    cy.getByText(/frontend developer/i)
-      .getByText(/Hey, I'm Arya./i)
+    cy.getByText(/frontend entwickler/i)
+      .getByText(/Hey, ich bin Arya./i)
       .getByText(/Twitter/i)
   })
 
   it('should have recent posts', () => {
-    cy.getByText(/A Lannister always pays his debt/i)
+    cy.getByText(/Ein Lannister bezahlt immer seine Schulden./i)
   })
 
   it('should have recent projects', () => {
-    cy.getByText(/Production of a keyboard/i)
+    cy.getByText(/Produktion einer eigenen Tastatur/i)
   })
 
   it('should have a footer', () => {

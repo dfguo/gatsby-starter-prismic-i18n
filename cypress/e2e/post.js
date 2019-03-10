@@ -2,7 +2,7 @@ describe('post', () => {
   it('should be clickable on home', () => {
     cy.visit('/')
       .waitForRouteChange()
-      .getByText(/A Lannister always pays his debt/i)
+      .getByText(/Ein Lannister bezahlt immer seine Schulden./i)
       .click()
       .waitForRouteChange()
       .assertRoute('/a-lannister-always-pays-his-debt')
@@ -10,17 +10,17 @@ describe('post', () => {
   it('should have its content', () => {
     cy.visit('/a-lannister-always-pays-his-debt')
       .waitForRouteChange()
-      .getByText(/A Lannister always pays his debt/i)
+      .getByText(/Ein Lannister bezahlt immer seine Schulden./i)
       .getByText(/11.10.2018/i)
-      .getByText(/Hello, this is a new line on this blogpost./i)
+      .getByText(/Hallo, dies ist eine neue Zeile in diesem Blogbeitrag./i)
   })
   it('should have working recent posts', () => {
     cy.visit('/a-lannister-always-pays-his-debt')
       .waitForRouteChange()
-      .getByText(/Why you shouldn't visit King's Landing/i)
+      .getByText(/Warum Du King's Landing nicht besuchen solltest/i)
       .click()
       .waitForRouteChange()
-      .getByText(/Why you shouldn't visit King's Landing/i)
+      .getByText(/Warum Du King's Landing nicht besuchen solltest/i)
   })
   it('should link to its category', () => {
     cy.visit('/a-lannister-always-pays-his-debt')
@@ -28,6 +28,6 @@ describe('post', () => {
       .getByText(/Information/i)
       .click()
       .waitForRouteChange()
-      .getByText(/Category/i)
+      .getByText(/Kategorie/i)
   })
 })

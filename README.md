@@ -7,7 +7,7 @@ Based on [gatsby-starter-prismic](https://github.com/LekoArts/gatsby-starter-pri
 
 [![Deploy to Netlify](https://www.netlify.com/img/deploy/button.svg)](https://app.netlify.com/start/deploy?repository=https://github.com/LekoArts/gatsby-starter-prismic-i18n)
 
-[![CircleCI](https://circleci.com/gh/LekoArts/gatsby-starter-prismic.svg?style=svg)](https://circleci.com/gh/LekoArts/gatsby-starter-prismic-i18n) [![Netlify Status](https://api.netlify.com/api/v1/badges/f06e32cf-ef46-4544-b37d-0de548c0ea1b/deploy-status)](https://app.netlify.com/sites/gatsby-starter-prismic-i18n/deploys)
+[![CircleCI](https://circleci.com/gh/LekoArts/gatsby-starter-prismic-i18n.svg?style=svg)](https://circleci.com/gh/LekoArts/gatsby-starter-prismic-i18n) [![Netlify Status](https://api.netlify.com/api/v1/badges/fc074687-c473-405f-9c6d-d5207bd6b87c/deploy-status)](https://app.netlify.com/sites/gatsby-starter-prismic-i18n/deploys)
 
 ## About Me
 
@@ -265,6 +265,52 @@ const theme = {
 }
 
 export default theme
+```
+
+The configuration for i18n can be found in `config/i18n`:
+
+```JS
+module.exports = {
+  'de-de': {
+    default: true,
+    path: 'de',
+    locale: 'de-de',
+    siteLanguage: 'de',
+    ogLang: 'de_DE',
+    defaultTitle: website.title,
+    defaultTitleAlt: website.titleAlt,
+    defaultDescription: 'Basierend auf gatsby-starter-prismic mit Unterstützung für Lokalisierung (i18n)',
+    headline: 'Schreiben und Veröffentlichen für LekoArts',
+    category: 'Kategorie',
+    categories: 'Kategorien',
+    was: 'wurde',
+    were: 'wurden',
+    tagged: 'markiert mit',
+    recent: 'Neue',
+    projects: 'Projekte',
+    allCategories: 'Alle Kategorien',
+    entries: 'Einträge',
+  },
+  'en-gb': {
+    path: 'en',
+    locale: 'en-gb',
+    siteLanguage: 'en',
+    ogLang: 'en_US',
+    defaultTitle: website.title,
+    defaultTitleAlt: website.titleAlt,
+    defaultDescription: website.description,
+    headline: website.headline,
+    category: 'Category',
+    categories: 'Categories',
+    was: 'was',
+    were: 'were',
+    tagged: 'tagged with',
+    recent: 'Recent',
+    projects: 'projects',
+    allCategories: 'All categories',
+    entries: 'entries',
+  },
+}
 ```
 
 **Attention:** You also need to edit `static/robots.txt` to include your domain!
