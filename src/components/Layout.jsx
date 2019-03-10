@@ -10,7 +10,6 @@ import { ThemeProvider } from 'emotion-theming'
 import '@reach/skip-nav/styles.css'
 
 import Footer from './Footer'
-import SEO from './SEO'
 import SkipNavLink from './SkipNavLink'
 import { theme, reset } from '../styles'
 import i18n from '../../config/i18n'
