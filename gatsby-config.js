@@ -14,12 +14,7 @@ module.exports = {
   siteMetadata: {
     siteUrl: website.url + pathPrefix, // For gatsby-plugin-sitemap
     pathPrefix,
-    title: website.title,
-    titleAlt: website.titleAlt,
-    description: website.description,
     banner: website.logo,
-    headline: website.headline,
-    siteLanguage: website.siteLanguage,
     ogLanguage: website.ogLanguage,
     author: website.author,
     twitter: website.twitter,
@@ -38,8 +33,6 @@ module.exports = {
         linkResolver: () => post => `/${post.uid}`,
         // PrismJS highlighting for labels and slices
         htmlSerializer: () => prismicHtmlSerializer,
-        // Remove this config option if you only have one language in your Prismic repository
-        lang: 'en-gb',
       },
     },
     'gatsby-plugin-lodash',

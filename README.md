@@ -1,12 +1,13 @@
-# Gatsby Starter: Prismic
+# Gatsby Starter: Prismic i18n
 
 A typography-heavy & light-themed Gatsby Starter which uses the Headless CMS [Prismic](https://prismic.io/).
+Based on [gatsby-starter-prismic](https://github.com/LekoArts/gatsby-starter-prismic) with Internationalization (i18n) support
 
-[Demo Website](https://prismic.lekoarts.de)
+[Demo Website](https://prismic-i18n.lekoarts.de)
 
-[![Deploy to Netlify](https://www.netlify.com/img/deploy/button.svg)](https://app.netlify.com/start/deploy?repository=https://github.com/LekoArts/gatsby-starter-prismic)
+[![Deploy to Netlify](https://www.netlify.com/img/deploy/button.svg)](https://app.netlify.com/start/deploy?repository=https://github.com/LekoArts/gatsby-starter-prismic-i18n)
 
-[![CircleCI](https://circleci.com/gh/LekoArts/gatsby-starter-prismic.svg?style=svg)](https://circleci.com/gh/LekoArts/gatsby-starter-prismic) [![Netlify Status](https://api.netlify.com/api/v1/badges/f06e32cf-ef46-4544-b37d-0de548c0ea1b/deploy-status)](https://app.netlify.com/sites/gatsby-starter-prismic/deploys)
+[![CircleCI](https://circleci.com/gh/LekoArts/gatsby-starter-prismic.svg?style=svg)](https://circleci.com/gh/LekoArts/gatsby-starter-prismic-i18n) [![Netlify Status](https://api.netlify.com/api/v1/badges/f06e32cf-ef46-4544-b37d-0de548c0ea1b/deploy-status)](https://app.netlify.com/sites/gatsby-starter-prismic-i18n/deploys)
 
 ## About Me
 
@@ -31,11 +32,13 @@ Multiple features of Prismic are used in this starter:
 - **Labels**: When marking a single word or a whole block with the given labels, Prism.js will transform these to syntax-highlighted codeblocks
 - **Relationship fields**: Categorize your blogposts in Categories via a relationship field. You can change categories on the fly
 - **Both custom types (Single / Repeatable)**: (Nearly) Every aspect of the website is managed with Prismic. The social media links or the recent projects get both managed in Prismic, no hardcoded entries!
+- **i18n**: Use the Internationalization/Localization features of Prismic!
 
 Therefore the starter has following features:
 
 - Prismic as Headless CMS
 - Emotion for styling
+- i18n
 - Cypress for End-to-End testing
 - PrismJS highlighting
 - Responsive images (gatsby-image)
@@ -62,14 +65,15 @@ Therefore the starter has following features:
 The easiest way to deploy this starter is to use the same setup, meaning that your Prismic repository is configured the same way as this starter. The rest of this README aims to explain exactly that. You can read through the instructions with this high-level overview in mind:
 
 1. Clone and install the starter
-2. Register an account on Prismic
-3. Configure your custom types
-4. Create an API key and store it in an ENV variable
-5. Go to your content tab
-6. Create new documents for the `Homepage, Hero Links, Projects` type and fill out every input field
-7. Create at least one document for the `Category` type
-8. Create at least one document for the `Post` type. Every _Slice_ needs to be used at least one time and it needs to have one category assigned! _Note: You could for example create one post with every slice and one category in it._
-9. Your project is ready for development and production
+1. Register an account on Prismic
+1. Configure your custom types
+1. Create an API key and store it in an ENV variable
+1. Add a second language to your Prismic repository
+1. Go to your content tab
+1. Create new documents for the `Homepage, Hero Links, Projects` type and fill out every input field
+1. Create at least one document for the `Category` type
+1. Create at least one document for the `Post` type. Every _Slice_ needs to be used at least one time and it needs to have one category assigned! _Note: You could for example create one post with every slice and one category in it._
+1. Your project is ready for development and production
 
 ### Custom setup
 
@@ -132,6 +136,10 @@ Follow the second and third step (with the respective file from `.prismic`) for 
 | Projects   | projects   | Single     |
 
 These are the exact same custom types I used for this starter.
+
+### i18n
+
+Go to your settings and click on `Translations & locales` to add a second locale.
 
 ### gatsby-config
 
@@ -209,12 +217,11 @@ You can configure your setup in `config/website`:
 ```JS
 module.exports = {
   pathPrefix: '/', // Prefix for all links. If you deploy your site to example.com/portfolio your pathPrefix should be "portfolio"
-  title: 'Gatsby Starter - Prismic.io', // Navigation and Site Title
+  title: 'Gatsby Starter - Prismic.io - i18n', // Navigation and Site Title
   titleAlt: 'Gatsby Prismic.io', // Title for JSONLD
-  description: 'A typography-heavy & light-themed Gatsby Starter which uses the Headless CMS Prismic.',
+  description: 'Based on gatsby-starter-prismic with Internationalization (i18n) support',
   headline: 'Writing and publishing content for LekoArts', // Headline for schema.org JSONLD
-  url: 'https://prismic.lekoarts.de', // Domain of your site. No trailing slash!
-  siteLanguage: 'en', // Language Tag on <html> element
+  url: 'https://prismic-i18n.lekoarts.de', // Domain of your site. No trailing slash!
   logo: '/logos/logo-1024.png', // Used for SEO
   ogLanguage: 'en_US', // Facebook Language
 
@@ -225,8 +232,9 @@ module.exports = {
   themeColor: '#3D63AE',
   backgroundColor: '#EBEDF2',
 
-  twitter: '@starter_prismicio', // Twitter Username
-  facebook: 'gatsby-prismic', // Facebook Site Name
+  twitter: '@starter_prismicio-i18n', // Twitter Username
+  facebook: 'gatsby-prismic-i18n', // Facebook Site Name
+  googleAnalyticsID: 'UA-XXXXXX-X',
 
   skipNavId: 'reach-skip-nav', // ID for the "Skip to content" a11y feature
 }

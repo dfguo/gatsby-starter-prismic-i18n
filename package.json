@@ -1,6 +1,6 @@
 {
-  "name": "gatsby-starter-prismic",
-  "description": "A typography-heavy & light-themed Gatsby Starter which uses the Headless CMS Prismic",
+  "name": "gatsby-starter-prismic-i18n",
+  "description": "Based on gatsby-starter-prismic with Internationalization (i18n) support",
   "private": true,
   "license": "MIT",
   "version": "1.0.0",

@@ -4,26 +4,17 @@ import PropTypes from 'prop-types'
 import { useStaticQuery, graphql } from 'gatsby'
 import Facebook from './Facebook'
 import Twitter from './Twitter'
+import i18n from '../../../config/i18n'
 
 // Complete tutorial: https://www.gatsbyjs.org/docs/add-seo-component/
 
-const SEO = ({ title, desc, banner, pathname, article, node }) => {
+const SEO = ({ title, desc, banner, pathname, article, node, locale }) => {
   const { site } = useStaticQuery(query)
+  const { defaultTitle, defaultDescription, siteLanguage, headline } = i18n[locale]
 
   const {
     buildTime,
-    siteMetadata: {
-      siteUrl,
-      defaultTitle,
-      defaultDescription,
-      defaultBanner,
-      headline,
-      siteLanguage,
-      ogLanguage,
-      author,
-      twitter,
-      facebook,
-    },
+    siteMetadata: { siteUrl, defaultBanner, ogLanguage, author, twitter, facebook },
   } = site
 
   const seo = {
@@ -178,6 +169,7 @@ SEO.propTypes = {
   pathname: PropTypes.string,
   article: PropTypes.bool,
   node: PropTypes.object,
+  locale: PropTypes.string,
 }
 
 SEO.defaultProps = {
@@ -187,6 +179,7 @@ SEO.defaultProps = {
   pathname: null,
   article: false,
   node: null,
+  locale: 'de-de',
 }
 
 const query = graphql`
@@ -195,11 +188,7 @@ const query = graphql`
       buildTime(formatString: "YYYY-MM-DD")
       siteMetadata {
         siteUrl
-        defaultTitle: title
-        defaultDescription: description
         defaultBanner: banner
-        headline
-        siteLanguage
         ogLanguage
         author
         twitter

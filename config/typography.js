@@ -4,7 +4,7 @@ import Typography from 'typography'
 // The scaleRatio will be overwritten for smaller breakpoints in src/components/Layout
 
 const typography = new Typography({
-  title: 'Gatsby Starter Prismic.io',
+  title: 'Gatsby Starter Prismic.io - i18n',
   baseFontSize: '18px',
   baseLineHeight: 1.45,
   headerFontFamily: [
