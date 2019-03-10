@@ -1,4 +1,4 @@
-import React, { Component } from 'react'
+import React from 'react'
 import PropTypes from 'prop-types'
 import styled from '@emotion/styled'
 
@@ -9,12 +9,7 @@ const StyledFooter = styled.footer`
   color: ${props => props.theme.colors.grey};
 `
 
-class Footer extends Component {
-  render() {
-    const { children } = this.props
-    return <StyledFooter>{children}</StyledFooter>
-  }
-}
+const Footer = ({ children }) => <StyledFooter>{children}</StyledFooter>
 
 export default Footer
 

@@ -1,8 +1,8 @@
-import React, { Component } from 'react'
+import React from 'react'
 import PropTypes from 'prop-types'
 import styled from '@emotion/styled'
-import { Link } from 'gatsby'
 import Categories from './Categories'
+import LocalizedLink from '../LocalizedLink'
 
 const Item = styled.li`
   margin-bottom: 1.45rem;
@@ -20,7 +20,7 @@ const Headline = styled.p`
   }
 `
 
-const StyledLink = styled(Link)`
+const StyledLink = styled(LocalizedLink)`
   font-size: 2.369rem;
   color: ${props => props.theme.colors.black};
   font-style: normal;
@@ -29,19 +29,16 @@ const StyledLink = styled(Link)`
   }
 `
 
-export default class ListItem extends Component {
-  render() {
-    const { node, categories } = this.props
-    return (
-      <Item>
-        <Headline>
-          {node.data.date} — {categories && <Categories categories={categories} />}
-        </Headline>
-        <StyledLink to={node.uid}>{node.data.title.text}</StyledLink>
-      </Item>
-    )
-  }
-}
+const ListItem = ({ node, categories }) => (
+  <Item>
+    <Headline>
+      {node.data.date} — {categories && <Categories categories={categories} />}
+    </Headline>
+    <StyledLink to={`/${node.uid}`}>{node.data.title.text}</StyledLink>
+  </Item>
+)
+
+export default ListItem
 
 ListItem.propTypes = {
   node: PropTypes.object.isRequired,

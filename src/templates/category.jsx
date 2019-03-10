@@ -1,9 +1,13 @@
+/* eslint react/destructuring-assignment: 0 */
 import React from 'react'
 import PropTypes from 'prop-types'
 import { graphql } from 'gatsby'
 import styled from '@emotion/styled'
+import { Global, css } from '@emotion/core'
 import { Layout, Listing, Wrapper, Title, SEO, Header } from '../components'
 import website from '../../config/website'
+import { LocaleContext } from '../components/Layout'
+import LocalizedLink from '../components/LocalizedLink'
 
 const Hero = styled.header`
   background-color: ${props => props.theme.colors.primary};
@@ -27,34 +31,60 @@ const Headline = styled.p`
 
 const CatWrapper = Wrapper.withComponent('main')
 
-const Category = ({
-  pageContext: { category },
+const LocaleSwitcherStyle = theme => css`
+  [data-name='locale-switcher'] {
+    color: ${theme.colors.greyBlue};
+    a {
+      color: white;
+    }
+  }
+`
+
+const Content = ({
+  pageContext: { category, locale },
   data: {
     posts: { edges, totalCount },
   },
   location,
-}) => (
-  <Layout>
-    <SEO title={`Category: ${category} | ${website.titleAlt}`} pathname={location.pathname} />
-    <Hero>
-      <Wrapper>
-        <Header invert />
-        <Headline>Category</Headline>
-        <h1>{category}</h1>
-      </Wrapper>
-    </Hero>
-    <CatWrapper id={website.skipNavId}>
-      <Title style={{ marginTop: '4rem' }}>
-        {totalCount} {totalCount === 1 ? 'Post' : 'Posts'} {totalCount === 1 ? 'was' : 'were'} tagged with "{category}"
-      </Title>
-      <Listing posts={edges} />
-    </CatWrapper>
+}) => {
+  const lang = React.useContext(LocaleContext)
+  const i18n = lang.i18n[lang.locale]
+
+  return (
+    <>
+      <Global styles={LocaleSwitcherStyle} />
+      <SEO
+        title={`${i18n.category}: ${category} | ${i18n.defaultTitleAlt}`}
+        pathname={location.pathname}
+        locale={locale}
+      />
+      <Hero>
+        <Wrapper>
+          <Header invert />
+          <Headline>{i18n.category}</Headline>
+          <h1>{category}</h1>
+        </Wrapper>
+      </Hero>
+      <CatWrapper id={website.skipNavId}>
+        <Title style={{ marginTop: '4rem' }}>
+          {totalCount} {totalCount === 1 ? 'Post' : 'Posts'} {totalCount === 1 ? i18n.was : i18n.were} {i18n.tagged} "
+          {category}" – <LocalizedLink to="/categories">{i18n.allCategories}</LocalizedLink>
+        </Title>
+        <Listing posts={edges} />
+      </CatWrapper>
+    </>
+  )
+}
+
+const Category = props => (
+  <Layout locale={props.pageContext.locale}>
+    <Content {...props} />
   </Layout>
 )
 
 export default Category
 
-Category.propTypes = {
+Content.propTypes = {
   pageContext: PropTypes.shape({
     category: PropTypes.string.isRequired,
   }).isRequired,
@@ -67,14 +97,21 @@ Category.propTypes = {
   location: PropTypes.object.isRequired,
 }
 
+Category.propTypes = {
+  pageContext: PropTypes.shape({
+    locale: PropTypes.string.isRequired,
+  }).isRequired,
+}
+
 export const pageQuery = graphql`
-  query CategoryPage($category: String!) {
+  query CategoryPage($category: String!, $locale: String!) {
     posts: allPrismicPost(
       sort: { fields: [data___date], order: DESC }
       filter: {
         data: {
           categories: { elemMatch: { category: { document: { elemMatch: { data: { name: { eq: $category } } } } } } }
         }
+        lang: { eq: $locale }
       }
     ) {
       totalCount

@@ -3,6 +3,7 @@ require('dotenv').config({
 })
 
 const prismicHtmlSerializer = require('./src/gatsby/htmlSerializer')
+const prismicLinkResolver = require('./src/gatsby/linkResolver')
 
 const website = require('./config/website')
 
@@ -24,13 +25,14 @@ module.exports = {
   plugins: [
     'gatsby-plugin-react-helmet',
     'gatsby-plugin-emotion',
+    'gatsby-plugin-catch-links',
     {
       resolve: 'gatsby-source-prismic',
       options: {
         repositoryName: 'gatsby-starter-prismic',
         accessToken: `${process.env.API_KEY}`,
         // Get the correct URLs in blog posts
-        linkResolver: () => post => `/${post.uid}`,
+        linkResolver: () => prismicLinkResolver,
         // PrismJS highlighting for labels and slices
         htmlSerializer: () => prismicHtmlSerializer,
       },

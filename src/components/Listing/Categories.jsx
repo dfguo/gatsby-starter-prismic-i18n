@@ -1,23 +1,20 @@
-import React, { Component } from 'react'
+import React from 'react'
 import PropTypes from 'prop-types'
-import { Link } from 'gatsby'
 import kebabCase from 'lodash/kebabCase'
+import LocalizedLink from '../LocalizedLink'
 
-export default class Categories extends Component {
-  render() {
-    const { categories } = this.props
-    return (
-      <>
-        {categories.map((cat, i) => (
-          <React.Fragment key={cat}>
-            {!!i && ', '}
-            <Link to={`/categories/${kebabCase(cat)}`}>{cat}</Link>
-          </React.Fragment>
-        ))}
-      </>
-    )
-  }
-}
+const Categories = ({ categories }) => (
+  <>
+    {categories.map((cat, i) => (
+      <React.Fragment key={cat}>
+        {!!i && ', '}
+        <LocalizedLink to={`/categories/${kebabCase(cat)}`}>{cat}</LocalizedLink>
+      </React.Fragment>
+    ))}
+  </>
+)
+
+export default Categories
 
 Categories.propTypes = {
   categories: PropTypes.array.isRequired,

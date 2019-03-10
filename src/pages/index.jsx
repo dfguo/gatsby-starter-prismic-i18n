@@ -1,9 +1,11 @@
-import React, { Component } from 'react'
+import React from 'react'
 import PropTypes from 'prop-types'
 import styled from '@emotion/styled'
 import { graphql } from 'gatsby'
 import { Layout, Listing, Wrapper, Title } from '../components'
 import website from '../../config/website'
+import { LocaleContext } from '../components/Layout'
+import SEO from '../components/SEO'
 
 const Hero = styled.header`
   background-color: ${props => props.theme.colors.greyLight};
@@ -94,54 +96,71 @@ const ProjectListing = styled.ul`
 
 const IndexWrapper = Wrapper.withComponent('main')
 
-class Index extends Component {
-  render() {
-    const {
-      data: { homepage, social, posts, projects },
-    } = this.props
-    return (
-      <Layout>
-        <Hero>
-          <HeroInner>
-            <h1>{homepage.data.title.text}</h1>
-            <HeroText dangerouslySetInnerHTML={{ __html: homepage.data.content.html }} />
-            <Social>
-              {social.edges.map((s, index) => (
-                <li data-name={`social-entry-${index}`} key={s.node.primary.label.text}>
-                  <a href={s.node.primary.link.url}>{s.node.primary.label.text}</a>
-                </li>
-              ))}
-            </Social>
-          </HeroInner>
-        </Hero>
-        <IndexWrapper id={website.skipNavId} style={{ paddingTop: '2rem', paddingBottom: '2rem' }}>
-          <Title style={{ marginTop: '4rem' }}>Recent posts</Title>
-          <Listing posts={posts.edges} />
-          <Title style={{ marginTop: '8rem' }}>Recent projects</Title>
-          <ProjectListing>
-            {projects.edges.map(project => (
-              <li key={project.node.primary.label.text}>
-                <a href={project.node.primary.link.url}>{project.node.primary.label.text}</a>
-              </li>
-            ))}
-          </ProjectListing>
-        </IndexWrapper>
-      </Layout>
-    )
-  }
+const Content = ({ posts, projects }) => {
+  const lang = React.useContext(LocaleContext)
+  const i18n = lang.i18n[lang.locale]
+
+  return (
+    <IndexWrapper id={website.skipNavId} style={{ paddingTop: '2rem', paddingBottom: '2rem' }}>
+      <Title style={{ marginTop: '4rem' }}>{i18n.recent} Posts</Title>
+      <Listing posts={posts.edges} />
+      <Title style={{ marginTop: '8rem' }}>
+        {i18n.recent} {i18n.projects}
+      </Title>
+      <ProjectListing>
+        {projects.edges[0].node.data.body.map(project => (
+          <li key={project.primary.label.text}>
+            <a href={project.primary.link.url}>{project.primary.label.text}</a>
+          </li>
+        ))}
+      </ProjectListing>
+    </IndexWrapper>
+  )
 }
+
+const Index = ({ data: { homepage, social, posts, projects }, pageContext: { locale }, location }) => (
+  <Layout locale={locale}>
+    <SEO pathname={location.pathname} locale={locale} />
+    <Hero>
+      <HeroInner>
+        <h1>{homepage.data.title.text}</h1>
+        <HeroText dangerouslySetInnerHTML={{ __html: homepage.data.content.html }} />
+        <Social>
+          {social.edges[0].node.data.body.map((s, index) => (
+            <li data-name={`social-entry-${index}`} key={s.primary.label.text}>
+              <a href={s.primary.link.url}>{s.primary.label.text}</a>
+            </li>
+          ))}
+        </Social>
+      </HeroInner>
+    </Hero>
+    <Content posts={posts} projects={projects} />
+  </Layout>
+)
 
 export default Index
 
 Index.propTypes = {
   data: PropTypes.shape({
     posts: PropTypes.object.isRequired,
+    homepage: PropTypes.object.isRequired,
+    social: PropTypes.object.isRequired,
+    projects: PropTypes.object.isRequired,
   }).isRequired,
+  pageContext: PropTypes.shape({
+    locale: PropTypes.string.isRequired,
+  }).isRequired,
+  location: PropTypes.object.isRequired,
+}
+
+Content.propTypes = {
+  posts: PropTypes.object.isRequired,
+  projects: PropTypes.object.isRequired,
 }
 
 export const pageQuery = graphql`
-  query IndexQuery {
-    homepage: prismicHomepage {
+  query IndexQuery($locale: String!) {
+    homepage: prismicHomepage(lang: { eq: $locale }) {
       data {
         title {
           text
@@ -151,21 +170,25 @@ export const pageQuery = graphql`
         }
       }
     }
-    social: allPrismicHeroLinksBodyLinkItem {
+    social: allPrismicHeroLinks(filter: { lang: { eq: $locale } }) {
       edges {
         node {
-          primary {
-            label {
-              text
-            }
-            link {
-              url
+          data {
+            body {
+              primary {
+                label {
+                  text
+                }
+                link {
+                  url
+                }
+              }
             }
           }
         }
       }
     }
-    posts: allPrismicPost(sort: { fields: [data___date], order: DESC }) {
+    posts: allPrismicPost(sort: { fields: [data___date], order: DESC }, filter: { lang: { eq: $locale } }) {
       edges {
         node {
           uid
@@ -187,15 +210,19 @@ export const pageQuery = graphql`
         }
       }
     }
-    projects: allPrismicProjectsBodyLinkItem {
+    projects: allPrismicProjects(filter: { lang: { eq: $locale } }) {
       edges {
         node {
-          primary {
-            label {
-              text
-            }
-            link {
-              url
+          data {
+            body {
+              primary {
+                label {
+                  text
+                }
+                link {
+                  url
+                }
+              }
             }
           }
         }

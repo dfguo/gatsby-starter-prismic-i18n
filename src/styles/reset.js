@@ -9,6 +9,7 @@ const reset = css`
   html {
     text-rendering: optimizeLegibility;
     overflow-x: hidden;
+    overflow-y: auto;
     box-sizing: border-box;
     -ms-overflow-style: scrollbar;
     -webkit-tap-highlight-color: rgba(0, 0, 0, 0);

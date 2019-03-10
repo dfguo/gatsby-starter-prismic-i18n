@@ -5360,6 +5360,14 @@ gatsby-node-helpers@^0.3.0:
     lodash "^4.17.4"
     p-is-promise "^1.1.0"
 
+gatsby-plugin-catch-links@^2.0.12:
+  version "2.0.12"
+  resolved "https://registry.yarnpkg.com/gatsby-plugin-catch-links/-/gatsby-plugin-catch-links-2.0.12.tgz#d09b4910c183d6a50940bd1d9c39455e957f8340"
+  integrity sha512-ofdfXNiPeHf+VNtsaQnvrWvS3g0afzQg9LAMv5vxnKbuUKd2g+rT6NFFWQoMJX4su4D5tUZPPDmNw1kChcOcLw==
+  dependencies:
+    "@babel/runtime" "^7.0.0"
+    escape-string-regexp "^1.0.5"
+
 gatsby-plugin-emotion@^4.0.4:
   version "4.0.4"
   resolved "https://registry.yarnpkg.com/gatsby-plugin-emotion/-/gatsby-plugin-emotion-4.0.4.tgz#de005fc40cf02d8f30dfa7dd2c6b6ec394c10fbc"

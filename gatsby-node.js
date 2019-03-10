@@ -1,13 +1,39 @@
 const _ = require('lodash')
+const locales = require('./config/i18n')
+const { replaceTrailing, localizedSlug, replaceBoth, wrapper } = require('./src/utils/gatsby-node-helpers')
 
-// graphql function doesn't throw an error so we have to check to check for the result.errors to throw manually
-const wrapper = promise =>
-  promise.then(result => {
-    if (result.errors) {
-      throw result.errors
-    }
-    return result
+// Take the pages from src/pages and generate pages for all locales, e.g. /index and /en/index
+exports.onCreatePage = ({ page, actions }) => {
+  const { createPage, deletePage } = actions
+
+  // Only create one 404 page at /404.html
+  if (page.path.includes('404')) {
+    return
+  }
+
+  // First delete the pages so we can re-create them
+  deletePage(page)
+
+  Object.keys(locales).map(lang => {
+    // Remove the trailing slash from the path, e.g. --> /categories
+    page.path = replaceTrailing(page.path)
+
+    // Remove the leading AND traling slash from path, e.g. --> categories
+    const name = replaceBoth(page.path)
+
+    // Create the "slugs" for the pages. Unless default language, add prefix àla "/en"
+    const localizedPath = locales[lang].default ? page.path : `${locales[lang].path}${page.path}`
+
+    return createPage({
+      ...page,
+      path: localizedPath,
+      context: {
+        locale: lang,
+        name,
+      },
+    })
   })
+}
 
 exports.createPages = async ({ graphql, actions }) => {
   const { createPage } = actions
@@ -18,21 +44,21 @@ exports.createPages = async ({ graphql, actions }) => {
   const result = await wrapper(
     graphql(`
       {
-        allPrismicPost {
+        posts: allPrismicPost(sort: { fields: [data___date], order: DESC }) {
           edges {
             node {
               id
               uid
+              lang
+            }
+          }
+        }
+        categories: allPrismicCategory {
+          edges {
+            node {
+              lang
               data {
-                categories {
-                  category {
-                    document {
-                      data {
-                        name
-                      }
-                    }
-                  }
-                }
+                name
               }
             }
           }
@@ -41,36 +67,36 @@ exports.createPages = async ({ graphql, actions }) => {
     `)
   )
 
-  const categorySet = new Set()
-  const postsList = result.data.allPrismicPost.edges
+  const postsList = result.data.posts.edges
+  const categoryList = result.data.categories.edges
 
-  // Double check that the post has a category assigned
   postsList.forEach(edge => {
-    if (edge.node.data.categories[0].category) {
-      edge.node.data.categories.forEach(cat => {
-        categorySet.add(cat.category.document[0].data.name)
-      })
-    }
-
     // The uid you assigned in Prismic is the slug!
     createPage({
-      path: `/${edge.node.uid}`,
+      path: localizedSlug(edge.node),
       component: postTemplate,
       context: {
         // Pass the unique ID (uid) through context so the template can filter by it
         uid: edge.node.uid,
+        locale: edge.node.lang,
       },
     })
   })
 
-  const categoryList = Array.from(categorySet)
+  categoryList.forEach(c => {
+    const category = c.node.data.name
+    const { lang } = c.node
 
-  categoryList.forEach(category => {
+    const localizedPath = locales[lang].default
+      ? `/categories/${_.kebabCase(category)}`
+      : `/${locales[lang].path}/categories/${_.kebabCase(category)}`
+
     createPage({
-      path: `/categories/${_.kebabCase(category)}`,
+      path: localizedPath,
       component: categoryTemplate,
       context: {
         category,
+        locale: lang,
       },
     })
   })

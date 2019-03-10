@@ -10,12 +10,15 @@ import i18n from '../../../config/i18n'
 
 const SEO = ({ title, desc, banner, pathname, article, node, locale }) => {
   const { site } = useStaticQuery(query)
-  const { defaultTitle, defaultDescription, siteLanguage, headline } = i18n[locale]
+  const { defaultTitle, defaultDescription, siteLanguage, headline, categories } = i18n[locale]
 
   const {
     buildTime,
     siteMetadata: { siteUrl, defaultBanner, ogLanguage, author, twitter, facebook },
   } = site
+
+  const localizedPath = i18n[locale].default ? '' : `/${i18n[locale].path}`
+  const homeURL = `${siteUrl}${localizedPath}`
 
   const seo = {
     title: title || defaultTitle,
@@ -31,10 +34,10 @@ const SEO = ({ title, desc, banner, pathname, article, node, locale }) => {
   const schemaOrgWebPage = {
     '@context': 'http://schema.org',
     '@type': 'WebPage',
-    url: siteUrl,
+    url: homeURL,
     headline,
     inLanguage: siteLanguage,
-    mainEntityOfPage: siteUrl,
+    mainEntityOfPage: homeURL,
     description: defaultDescription,
     name: defaultTitle,
     author: {
@@ -72,6 +75,14 @@ const SEO = ({ title, desc, banner, pathname, article, node, locale }) => {
         name: 'Homepage',
       },
       position: 1,
+    },
+    {
+      '@type': 'ListItem',
+      item: {
+        '@id': `${homeURL}/categories`,
+        name: categories,
+      },
+      position: 2,
     },
   ]
 
@@ -122,7 +133,7 @@ const SEO = ({ title, desc, banner, pathname, article, node, locale }) => {
         '@id': seo.url,
         name: seo.title,
       },
-      position: 2,
+      position: 3,
     })
   }
 
@@ -140,7 +151,7 @@ const SEO = ({ title, desc, banner, pathname, article, node, locale }) => {
         <html lang={siteLanguage} />
         <meta name="description" content={seo.description} />
         <meta name="image" content={seo.image} />
-        <meta name="gatsby-starter" content="Gatsby Starter Prismic" />
+        <meta name="gatsby-starter" content="Gatsby Starter Prismic i18n" />
         {/* Insert schema.org data conditionally (webpage/article) + everytime (breadcrumbs) */}
         {!article && <script type="application/ld+json">{JSON.stringify(schemaOrgWebPage)}</script>}
         {article && <script type="application/ld+json">{JSON.stringify(schemaArticle)}</script>}

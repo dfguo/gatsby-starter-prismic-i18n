@@ -1,10 +1,11 @@
 /* eslint no-unused-expressions: 0 */
 /* eslint react/destructuring-assignment: 0 */
 
-import React, { Component } from 'react'
+import React from 'react'
 import PropTypes from 'prop-types'
-import { StaticQuery, graphql } from 'gatsby'
+import { useStaticQuery, graphql, Link } from 'gatsby'
 import { Global, css } from '@emotion/core'
+import styled from '@emotion/styled'
 import { ThemeProvider } from 'emotion-theming'
 import '@reach/skip-nav/styles.css'
 
@@ -12,6 +13,7 @@ import Footer from './Footer'
 import SEO from './SEO'
 import SkipNavLink from './SkipNavLink'
 import { theme, reset } from '../styles'
+import i18n from '../../config/i18n'
 
 import 'typeface-lora'
 import 'typeface-source-sans-pro'
@@ -71,57 +73,73 @@ const globalStyle = css`
   }
 `
 
-const PureLayout = ({ children, data, customSEO }) => (
-  <ThemeProvider theme={theme}>
-    <>
-      <Global styles={globalStyle} />
-      <SkipNavLink />
-      {!customSEO && <SEO />}
-      {children}
-      <Footer>
-        <div dangerouslySetInnerHTML={{ __html: data.prismicHomepage.data.footer.html }} />
-      </Footer>
-    </>
-  </ThemeProvider>
-)
+const LocaleSwitcher = styled.div`
+  position: absolute;
+  top: 0;
+  right: 0;
+  padding: 1rem;
+`
 
-class Layout extends Component {
-  render() {
-    return (
-      <StaticQuery
-        query={graphql`
-          query LayoutQuery {
-            prismicHomepage {
-              data {
-                footer {
-                  html
-                }
-              }
-            }
-          }
-        `}
-        render={data => (
-          <PureLayout {...this.props} data={data}>
-            {this.props.children}
-          </PureLayout>
-        )}
-      />
-    )
-  }
+const LocaleContext = React.createContext()
+
+const Layout = ({ children, locale }) => {
+  const data = useStaticQuery(query)
+  const footer = data.allPrismicHomepage.edges
+    .filter(edge => edge.node.lang === locale)
+    .map(r => r.node.data.footer.html)
+    .toString()
+
+  return (
+    <LocaleContext.Provider value={{ locale, i18n }}>
+      <ThemeProvider theme={theme}>
+        <>
+          <Global styles={globalStyle} />
+          <SkipNavLink />
+          <LocaleSwitcher data-name="locale-switcher">
+            <Link hrefLang="de-de" to="/">
+              DE
+            </Link>{' '}
+            /{' '}
+            <Link hrefLang="en-gb" to="/en">
+              EN
+            </Link>
+          </LocaleSwitcher>
+          {children}
+          <Footer>
+            <div dangerouslySetInnerHTML={{ __html: footer }} />
+          </Footer>
+        </>
+      </ThemeProvider>
+    </LocaleContext.Provider>
+  )
 }
 
 export default Layout
 
+export { LocaleContext }
+
+const query = graphql`
+  query LayoutQuery {
+    allPrismicHomepage {
+      edges {
+        node {
+          lang
+          data {
+            footer {
+              html
+            }
+          }
+        }
+      }
+    }
+  }
+`
+
 Layout.propTypes = {
   children: PropTypes.oneOfType([PropTypes.array, PropTypes.node]).isRequired,
+  locale: PropTypes.string,
 }
 
-PureLayout.propTypes = {
-  children: PropTypes.oneOfType([PropTypes.array, PropTypes.node]).isRequired,
-  data: PropTypes.object.isRequired,
-  customSEO: PropTypes.bool,
-}
-
-PureLayout.defaultProps = {
-  customSEO: false,
+Layout.defaultProps = {
+  locale: 'de-de',
 }

@@ -1,7 +1,7 @@
-import React, { Component } from 'react'
+import React from 'react'
 import PropTypes from 'prop-types'
-import { Link } from 'gatsby'
 import styled from '@emotion/styled'
+import LocalizedLink from './LocalizedLink'
 
 const StyledHeader = styled.nav`
   padding-bottom: 2rem;
@@ -14,18 +14,13 @@ const StyledHeader = styled.nav`
   }
 `
 
-class Header extends Component {
-  render() {
-    const { invert } = this.props
-    return (
-      <StyledHeader invert={invert}>
-        <Link to="/" aria-label="Back to Home">
-          Frontend Developer
-        </Link>
-      </StyledHeader>
-    )
-  }
-}
+const Header = ({ invert }) => (
+  <StyledHeader invert={invert}>
+    <LocalizedLink to="/" aria-label="Back to Home">
+      Frontend Developer
+    </LocalizedLink>
+  </StyledHeader>
+)
 
 export default Header
 
