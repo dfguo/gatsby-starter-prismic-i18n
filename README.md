@@ -110,7 +110,7 @@ Check your development environment! You'll need [Node.js](https://nodejs.org/en/
 To copy and install this starter run this command (with "project-name" being the name of your folder you wish to install it in):
 
 ```shell
-gatsby new project-name https://github.com/LekoArts/gatsby-starter-prismic
+gatsby new project-name https://github.com/LekoArts/gatsby-starter-prismic-i18n
 cd project-name
 ```
 
