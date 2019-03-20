@@ -159,7 +159,7 @@ You need to define the API Key for your Prismic repository in `gatsby-config.js`
 - You can generate an access token in the **API & Security** section of your repository settings. Setting a **Callback URL** is not necessary.
 - The token will be listed under "Permanent access tokens".
 
-It's best to store the API Key in an environment variable. Create the file `.env.development` in the root dir of your project. Its content should be:
+It's best to store the API Key in an environment variable. Create the file `.env` in the root dir of your project. Its content should be:
 
 `API_KEY=OIJSOJIO-YOURKEYHERE-EAJNALÖKND`
 
