@@ -2,7 +2,7 @@ import React from 'react'
 import PropTypes from 'prop-types'
 import styled from '@emotion/styled'
 import { graphql } from 'gatsby'
-import { Layout, Listing, Wrapper, Title } from '../components'
+import { Listing, Wrapper, Title } from '../components'
 import website from '../../config/website'
 import { LocaleContext } from '../components/Layout'
 import SEO from '../components/SEO'
@@ -96,47 +96,43 @@ const ProjectListing = styled.ul`
 
 const IndexWrapper = Wrapper.withComponent('main')
 
-const Content = ({ posts, projects }) => {
+const Index = ({ data: { homepage, social, posts, projects }, pageContext: { locale }, location }) => {
   const lang = React.useContext(LocaleContext)
   const i18n = lang.i18n[lang.locale]
 
   return (
-    <IndexWrapper id={website.skipNavId} style={{ paddingTop: '2rem', paddingBottom: '2rem' }}>
-      <Title style={{ marginTop: '4rem' }}>{i18n.recent} Posts</Title>
-      <Listing posts={posts.edges} />
-      <Title style={{ marginTop: '8rem' }}>
-        {i18n.recent} {i18n.projects}
-      </Title>
-      <ProjectListing>
-        {projects.edges[0].node.data.body.map(project => (
-          <li key={project.primary.label.text}>
-            <a href={project.primary.link.url}>{project.primary.label.text}</a>
-          </li>
-        ))}
-      </ProjectListing>
-    </IndexWrapper>
-  )
-}
-
-const Index = ({ data: { homepage, social, posts, projects }, pageContext: { locale }, location }) => (
-  <Layout locale={locale}>
-    <SEO pathname={location.pathname} locale={locale} />
-    <Hero>
-      <HeroInner>
-        <h1>{homepage.data.title.text}</h1>
-        <HeroText dangerouslySetInnerHTML={{ __html: homepage.data.content.html }} />
-        <Social>
-          {social.edges[0].node.data.body.map((s, index) => (
-            <li data-name={`social-entry-${index}`} key={s.primary.label.text}>
-              <a href={s.primary.link.url}>{s.primary.label.text}</a>
+    <>
+      <SEO pathname={location.pathname} locale={locale} />
+      <Hero>
+        <HeroInner>
+          <h1>{homepage.data.title.text}</h1>
+          <HeroText dangerouslySetInnerHTML={{ __html: homepage.data.content.html }} />
+          <Social>
+            {social.edges[0].node.data.body.map((s, index) => (
+              <li data-name={`social-entry-${index}`} key={s.primary.label.text}>
+                <a href={s.primary.link.url}>{s.primary.label.text}</a>
+              </li>
+            ))}
+          </Social>
+        </HeroInner>
+      </Hero>
+      <IndexWrapper id={website.skipNavId} style={{ paddingTop: '2rem', paddingBottom: '2rem' }}>
+        <Title style={{ marginTop: '4rem' }}>{i18n.recent} Posts</Title>
+        <Listing posts={posts.edges} />
+        <Title style={{ marginTop: '8rem' }}>
+          {i18n.recent} {i18n.projects}
+        </Title>
+        <ProjectListing>
+          {projects.edges[0].node.data.body.map(project => (
+            <li key={project.primary.label.text}>
+              <a href={project.primary.link.url}>{project.primary.label.text}</a>
             </li>
           ))}
-        </Social>
-      </HeroInner>
-    </Hero>
-    <Content posts={posts} projects={projects} />
-  </Layout>
-)
+        </ProjectListing>
+      </IndexWrapper>
+    </>
+  )
+}
 
 export default Index
 
@@ -151,11 +147,6 @@ Index.propTypes = {
     locale: PropTypes.string.isRequired,
   }).isRequired,
   location: PropTypes.object.isRequired,
-}
-
-Content.propTypes = {
-  posts: PropTypes.object.isRequired,
-  projects: PropTypes.object.isRequired,
 }
 
 export const pageQuery = graphql`

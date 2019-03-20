@@ -5,7 +5,7 @@ import styled from '@emotion/styled'
 import { kebabCase } from 'lodash'
 import { graphql } from 'gatsby'
 import { Global, css } from '@emotion/core'
-import { SEO, Layout, Wrapper, Header, Title } from '../components'
+import { SEO, Wrapper, Header, Title } from '../components'
 import { LocaleContext } from '../components/Layout'
 import LocalizedLink from '../components/LocalizedLink'
 
@@ -38,12 +38,13 @@ const LocaleSwitcherStyle = theme => css`
 
 const CatWrapper = Wrapper.withComponent('main')
 
-const Content = ({ location, data: { categories }, pageContext: { locale } }) => {
+const Categories = ({ location, data: { categories }, pageContext: { locale } }) => {
   const lang = React.useContext(LocaleContext)
   const i18n = lang.i18n[lang.locale]
 
   return (
     <>
+      <Global styles={LocaleSwitcherStyle} />
       <SEO title={`${i18n.allCategories} | ${i18n.defaultTitleAlt}`} pathname={location.pathname} locale={locale} />
       <Hero>
         <Wrapper>
@@ -67,16 +68,9 @@ const Content = ({ location, data: { categories }, pageContext: { locale } }) =>
   )
 }
 
-const Categories = props => (
-  <Layout locale={props.pageContext.locale}>
-    <Global styles={LocaleSwitcherStyle} />
-    <Content {...props} />
-  </Layout>
-)
-
 export default Categories
 
-Content.propTypes = {
+Categories.propTypes = {
   data: PropTypes.shape({
     categories: PropTypes.shape({
       edges: PropTypes.array.isRequired,
@@ -84,12 +78,6 @@ Content.propTypes = {
     }).isRequired,
   }).isRequired,
   location: PropTypes.object.isRequired,
-  pageContext: PropTypes.shape({
-    locale: PropTypes.string.isRequired,
-  }).isRequired,
-}
-
-Categories.propTypes = {
   pageContext: PropTypes.shape({
     locale: PropTypes.string.isRequired,
   }).isRequired,

@@ -81,7 +81,7 @@ const LocaleSwitcher = styled.div`
 
 const LocaleContext = React.createContext()
 
-const Layout = ({ children, locale }) => {
+const Layout = ({ children, pageContext: { locale } }) => {
   const data = useStaticQuery(query)
   const footer = data.allPrismicHomepage.edges
     .filter(edge => edge.node.lang === locale)
@@ -113,9 +113,7 @@ const Layout = ({ children, locale }) => {
   )
 }
 
-export default Layout
-
-export { LocaleContext }
+export { LocaleContext, Layout }
 
 const query = graphql`
   query LayoutQuery {
@@ -136,9 +134,7 @@ const query = graphql`
 
 Layout.propTypes = {
   children: PropTypes.oneOfType([PropTypes.array, PropTypes.node]).isRequired,
-  locale: PropTypes.string,
-}
-
-Layout.defaultProps = {
-  locale: 'de-de',
+  pageContext: PropTypes.shape({
+    locale: PropTypes.string.isRequired,
+  }).isRequired,
 }

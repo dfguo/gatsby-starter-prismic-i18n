@@ -3,7 +3,7 @@ import React from 'react'
 import PropTypes from 'prop-types'
 import { graphql } from 'gatsby'
 import styled from '@emotion/styled'
-import { Layout, Listing, Wrapper, SliceZone, Title, SEO, Header } from '../components'
+import { Listing, Wrapper, SliceZone, Title, SEO, Header } from '../components'
 import Categories from '../components/Listing/Categories'
 import website from '../../config/website'
 import { LocaleContext } from '../components/Layout'
@@ -27,7 +27,7 @@ const Headline = styled.p`
 
 const PostWrapper = Wrapper.withComponent('main')
 
-const Content = ({ data: { prismicPost, posts }, location, pageContext: { locale } }) => {
+const Post = ({ data: { prismicPost, posts }, location, pageContext: { locale } }) => {
   const lang = React.useContext(LocaleContext)
   const i18n = lang.i18n[lang.locale]
 
@@ -65,25 +65,13 @@ const Content = ({ data: { prismicPost, posts }, location, pageContext: { locale
   )
 }
 
-const Post = props => (
-  <Layout locale={props.pageContext.locale}>
-    <Content {...props} />
-  </Layout>
-)
-
 export default Post
 
-Content.propTypes = {
+Post.propTypes = {
   data: PropTypes.shape({
     prismicPost: PropTypes.object.isRequired,
   }).isRequired,
   location: PropTypes.object.isRequired,
-  pageContext: PropTypes.shape({
-    locale: PropTypes.string.isRequired,
-  }).isRequired,
-}
-
-Post.propTypes = {
   pageContext: PropTypes.shape({
     locale: PropTypes.string.isRequired,
   }).isRequired,

@@ -4,7 +4,7 @@ import PropTypes from 'prop-types'
 import { graphql } from 'gatsby'
 import styled from '@emotion/styled'
 import { Global, css } from '@emotion/core'
-import { Layout, Listing, Wrapper, Title, SEO, Header } from '../components'
+import { Listing, Wrapper, Title, SEO, Header } from '../components'
 import website from '../../config/website'
 import { LocaleContext } from '../components/Layout'
 import LocalizedLink from '../components/LocalizedLink'
@@ -40,7 +40,7 @@ const LocaleSwitcherStyle = theme => css`
   }
 `
 
-const Content = ({
+const Category = ({
   pageContext: { category, locale },
   data: {
     posts: { edges, totalCount },
@@ -76,15 +76,9 @@ const Content = ({
   )
 }
 
-const Category = props => (
-  <Layout locale={props.pageContext.locale}>
-    <Content {...props} />
-  </Layout>
-)
-
 export default Category
 
-Content.propTypes = {
+Category.propTypes = {
   pageContext: PropTypes.shape({
     category: PropTypes.string.isRequired,
   }).isRequired,
@@ -95,12 +89,6 @@ Content.propTypes = {
     }).isRequired,
   }).isRequired,
   location: PropTypes.object.isRequired,
-}
-
-Category.propTypes = {
-  pageContext: PropTypes.shape({
-    locale: PropTypes.string.isRequired,
-  }).isRequired,
 }
 
 export const pageQuery = graphql`
